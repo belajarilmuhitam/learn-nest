@@ -1,7 +1,16 @@
 import { Controller, Get, HttpCode, Post, Req, Res } from '@nestjs/common';
 
+interface Hero {
+  id: number;
+  nama: string;
+  type: string;
+  gambar: string;
+}
+
 @Controller('hero')
 export class HeroController {
+  private heroes: Hero[] = [];
+
   @Get('index')
   @HttpCode(200)
   index(@Res() response): void {
@@ -19,7 +28,9 @@ export class HeroController {
   }
 
   @Post('store')
-  store(@Req() request) {
+  store(@Req() request): { data: Hero } {
+    const { id, nama, type, gambar } = request.body;
+    this.heroes.push({ id, nama, type, gambar });
     return {
       data: request.body,
     };
